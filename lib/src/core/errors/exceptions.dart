@@ -1,8 +1,8 @@
 abstract class Exception {}
 
-class DatabaseException implements Exception {
+class LocalDatabaseException implements Exception {
   final String message;
-  const DatabaseException({required this.message});
+  const LocalDatabaseException({required this.message});
 
   @override
   String toString() => 'DatabaseException: $message';
