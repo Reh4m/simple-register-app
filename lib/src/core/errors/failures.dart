@@ -1,38 +1,38 @@
 import 'package:equatable/equatable.dart';
 
-abstract class Failure extends Equatable {}
+abstract class Failure extends Equatable {
+  final String message;
 
-class DatabaseFailure extends Failure {
+  const Failure({required this.message});
+
   @override
   List<Object?> get props => [];
+}
+
+class DatabaseFailure extends Failure {
+  const DatabaseFailure({required super.message});
 }
 
 class ValidationFailure extends Failure {
-  @override
-  List<Object?> get props => [];
+  const ValidationFailure({required super.message});
 }
 
 class UserNotFoundFailure extends Failure {
-  @override
-  List<Object?> get props => [];
+  const UserNotFoundFailure({required super.message});
 }
 
 class UserAlreadyExistsFailure extends Failure {
-  @override
-  List<Object?> get props => [];
+  const UserAlreadyExistsFailure({required super.message});
 }
 
 class InvalidCredentialsFailure extends Failure {
-  @override
-  List<Object?> get props => [];
+  const InvalidCredentialsFailure({required super.message});
 }
 
 class WeakPasswordFailure extends Failure {
-  @override
-  List<Object?> get props => [];
+  const WeakPasswordFailure({required super.message});
 }
 
 class PasswordMismatchFailure extends Failure {
-  @override
-  List<Object?> get props => [];
+  const PasswordMismatchFailure({required super.message});
 }
