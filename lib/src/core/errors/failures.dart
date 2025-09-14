@@ -12,22 +12,17 @@ class UserNotFoundFailure extends Failure {
   List<Object?> get props => [];
 }
 
-class WrongPasswordFailure extends Failure {
+class UserAlreadyExistsFailure extends Failure {
+  @override
+  List<Object?> get props => [];
+}
+
+class InvalidCredentialsFailure extends Failure {
   @override
   List<Object?> get props => [];
 }
 
 class WeakPasswordFailure extends Failure {
-  @override
-  List<Object?> get props => [];
-}
-
-class ExistingEmailFailure extends Failure {
-  @override
-  List<Object?> get props => [];
-}
-
-class TooManyRequestsFailure extends Failure {
   @override
   List<Object?> get props => [];
 }
