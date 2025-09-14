@@ -7,15 +7,23 @@ class DatabaseProvider {
   static const String _dbName = 'app_database.db';
   static const int _dbVersion = 1;
 
-  static Future<Database> get database async {
-    if (_database != null) return _database!;
+  // Singleton pattern:
+  // This ensures that only one instance of the database is created
+  // and used throughout the app.
+  static final DatabaseProvider _instance = DatabaseProvider._internal();
 
-    _database = await _initDatabase();
+  // Returns the singleton instance of the database provider.
+  factory DatabaseProvider() => _instance;
+
+  DatabaseProvider._internal();
+
+  Future<Database> get database async {
+    _database ??= await _initDatabase();
 
     return _database!;
   }
 
-  static Future<Database> _initDatabase() async {
+  Future<Database> _initDatabase() async {
     String path = join(await getDatabasesPath(), _dbName);
 
     return await openDatabase(
@@ -25,11 +33,11 @@ class DatabaseProvider {
     );
   }
 
-  static Future<void> _createDatabase(Database db, int version) async {
+  Future<void> _createDatabase(Database db, int version) async {
     await db.execute(UserTable.createTableQuery);
   }
 
-  static Future<void> closeDatabase() async {
+  Future<void> closeDatabase() async {
     if (_database != null) {
       await _database!.close();
 
@@ -37,7 +45,7 @@ class DatabaseProvider {
     }
   }
 
-  static Future<void> deleteDatabaseFile() async {
+  Future<void> deleteDatabaseFile() async {
     String path = join(await getDatabasesPath(), _dbName);
 
     await deleteDatabase(path);
