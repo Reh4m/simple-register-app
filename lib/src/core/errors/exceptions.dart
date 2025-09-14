@@ -1,13 +1,49 @@
-class DatabaseException implements Exception {}
+abstract class Exception {}
 
-class UserNotFoundException implements Exception {}
+class DatabaseException implements Exception {
+  final String message;
+  const DatabaseException({required this.message});
 
-class WrongPasswordException implements Exception {}
+  @override
+  String toString() => 'DatabaseException: $message';
+}
 
-class WeakPasswordException implements Exception {}
+class UserNotFoundException implements Exception {
+  final String message;
+  const UserNotFoundException({required this.message});
 
-class ExistingEmailException implements Exception {}
+  @override
+  String toString() => 'UserNotFoundException: $message';
+}
 
-class TooManyRequestsException implements Exception {}
+class UserAlreadyExistsException implements Exception {
+  final String message;
+  const UserAlreadyExistsException({required this.message});
 
-class PasswordMismatchException implements Exception {}
+  @override
+  String toString() => 'UserAlreadyExistsException: $message';
+}
+
+class InvalidCredentialsException implements Exception {
+  final String message;
+  const InvalidCredentialsException({required this.message});
+
+  @override
+  String toString() => 'InvalidCredentialsException: $message';
+}
+
+class WeakPasswordException implements Exception {
+  final String message;
+  const WeakPasswordException({required this.message});
+
+  @override
+  String toString() => 'WeakPasswordException: $message';
+}
+
+class PasswordMismatchException implements Exception {
+  final String message;
+  const PasswordMismatchException({required this.message});
+
+  @override
+  String toString() => 'PasswordMismatchException: $message';
+}
