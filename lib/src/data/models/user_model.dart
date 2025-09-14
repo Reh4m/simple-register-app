@@ -29,7 +29,7 @@ class UserModel extends UserEntity {
       'name': name,
       'email': email,
       'password': password,
-      'picture_image_path': pictureImagePath,
+      if (pictureImagePath != null) 'picture_image_path': pictureImagePath,
       'created_at': createdAt.toIso8601String(),
       'updated_at': updatedAt.toIso8601String(),
     };
