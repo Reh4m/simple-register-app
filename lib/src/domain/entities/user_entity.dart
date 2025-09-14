@@ -5,6 +5,7 @@ class UserEntity extends Equatable {
   final String name;
   final String email;
   final String password;
+  final String? pictureImagePath;
   final DateTime createdAt;
   final DateTime updatedAt;
 
@@ -13,6 +14,7 @@ class UserEntity extends Equatable {
     required this.name,
     required this.email,
     required this.password,
+    this.pictureImagePath,
     required this.createdAt,
     required this.updatedAt,
   });
@@ -35,6 +37,7 @@ class UserEntity extends Equatable {
     String? name,
     String? email,
     String? password,
+    String? pictureImagePath,
     DateTime? createdAt,
     DateTime? updatedAt,
   }) {
@@ -43,6 +46,7 @@ class UserEntity extends Equatable {
       name: name ?? this.name,
       email: email ?? this.email,
       password: password ?? this.password,
+      pictureImagePath: pictureImagePath ?? this.pictureImagePath,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
     );
