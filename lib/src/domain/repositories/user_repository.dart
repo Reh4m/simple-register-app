@@ -10,6 +10,4 @@ abstract class UserRepository {
   Future<Either<Failure, bool>> updateUser(UserEntity user);
 
   Future<Either<Failure, bool>> deleteUser(int id);
-
-  Future<Either<Failure, bool>> checkIfEmailExists(String email);
 }

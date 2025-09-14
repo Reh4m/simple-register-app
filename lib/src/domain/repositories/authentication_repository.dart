@@ -12,4 +12,6 @@ abstract class AuthenticationRepository {
   Future<Either<Failure, UserEntity>> signUpWithEmailAndPassword(
     SignUpEntity signUpData,
   );
+
+  Future<Either<Failure, bool>> checkIfEmailExists(String email);
 }
