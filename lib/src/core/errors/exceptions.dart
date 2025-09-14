@@ -8,6 +8,14 @@ class DatabaseException implements Exception {
   String toString() => 'DatabaseException: $message';
 }
 
+class ValidationException implements Exception {
+  final String message;
+  const ValidationException({required this.message});
+
+  @override
+  String toString() => 'ValidationException: $message';
+}
+
 class UserNotFoundException implements Exception {
   final String message;
   const UserNotFoundException({required this.message});
