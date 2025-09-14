@@ -1,0 +1,50 @@
+import 'package:equatable/equatable.dart';
+
+class UserEntity extends Equatable {
+  final int? id;
+  final String name;
+  final String email;
+  final String password;
+  final DateTime createdAt;
+  final DateTime updatedAt;
+
+  const UserEntity({
+    this.id,
+    required this.name,
+    required this.email,
+    required this.password,
+    required this.createdAt,
+    required this.updatedAt,
+  });
+
+  @override
+  List<Object?> get props => [id, name, email, password];
+
+  String get initials {
+    final nameParts = name.split(' ');
+
+    if (nameParts.length >= 2) {
+      return '${nameParts[0][0]}${nameParts[1][0]}'.toUpperCase();
+    }
+
+    return name.isNotEmpty ? name[0].toUpperCase() : '?';
+  }
+
+  UserEntity copyWith({
+    int? id,
+    String? name,
+    String? email,
+    String? password,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+  }) {
+    return UserEntity(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+    );
+  }
+}
