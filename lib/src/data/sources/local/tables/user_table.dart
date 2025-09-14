@@ -16,8 +16,8 @@ class UserTable {
       $emailColumn TEXT NOT NULL UNIQUE,
       $passwordColumn TEXT NOT NULL,
       $pictureImagePathColumn TEXT,
-      $createdAtColumn TEXT NOT NULL,
-      $updatedAtColumn TEXT NOT NULL
+      $createdAtColumn TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP,
+      $updatedAtColumn TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP
     )
   ''';
 }
