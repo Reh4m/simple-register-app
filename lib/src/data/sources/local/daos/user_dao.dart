@@ -35,7 +35,7 @@ class UserDao {
     }
   }
 
-  Future<UserModel?> fetchById(int id) async {
+  Future<UserModel> fetchById(int id) async {
     try {
       final db = await _databaseProvider.database;
 
