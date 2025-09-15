@@ -4,23 +4,23 @@ import 'package:simple_register_app/src/domain/entities/user_entity.dart';
 import 'package:simple_register_app/src/domain/repositories/user_repository.dart';
 
 class GetUserById {
-  final UserRepository repository;
+  final UserRepository _repository;
 
-  GetUserById({required this.repository});
+  GetUserById(this._repository);
 
   Future<Either<Failure, UserEntity>> call(int userId) async {
     if (userId <= 0) {
       return Left(ValidationFailure(message: 'ID de usuario inválido'));
     }
 
-    return await repository.getUserById(userId);
+    return await _repository.getUserById(userId);
   }
 }
 
 class GetUserByEmail {
-  final UserRepository repository;
+  final UserRepository _repository;
 
-  GetUserByEmail({required this.repository});
+  GetUserByEmail(this._repository);
 
   Future<Either<Failure, UserEntity>> call(String email) async {
     if (email.isEmpty) {
@@ -29,6 +29,6 @@ class GetUserByEmail {
       );
     }
 
-    return await repository.getUserByEmail(email);
+    return await _repository.getUserByEmail(email);
   }
 }

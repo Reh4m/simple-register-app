@@ -7,9 +7,9 @@ import 'package:simple_register_app/src/domain/entities/user_entity.dart';
 import 'package:simple_register_app/src/domain/repositories/authentication_repository.dart';
 
 class SignInUseCase {
-  final AuthenticationRepository repository;
+  final AuthenticationRepository _repository;
 
-  SignInUseCase(this.repository);
+  SignInUseCase(this._repository);
 
   Future<Either<Failure, UserEntity>> call(SignInEntity signInData) async {
     // Validate email and password before proceeding
@@ -25,14 +25,14 @@ class SignInUseCase {
       return Left(ValidationFailure(message: passwordValidation));
     }
 
-    return await repository.signInWithEmailAndPassword(signInData);
+    return await _repository.signInWithEmailAndPassword(signInData);
   }
 }
 
 class SignUpUseCase {
-  final AuthenticationRepository repository;
+  final AuthenticationRepository _repository;
 
-  SignUpUseCase(this.repository);
+  SignUpUseCase(this._repository);
 
   Future<Either<Failure, UserEntity>> call(SignUpEntity signUpData) async {
     // Validate name, email, password, and confirm password before proceeding
@@ -63,7 +63,7 @@ class SignUpUseCase {
       return Left(ValidationFailure(message: confirmPasswordValidation));
     }
 
-    final emailExists = await repository.checkIfEmailExists(signUpData.email);
+    final emailExists = await _repository.checkIfEmailExists(signUpData.email);
 
     return emailExists.fold((failure) => Left(failure), (exists) async {
       if (exists) {
@@ -74,7 +74,7 @@ class SignUpUseCase {
         );
       }
 
-      return await repository.signUpWithEmailAndPassword(signUpData);
+      return await _repository.signUpWithEmailAndPassword(signUpData);
     });
   }
 }
