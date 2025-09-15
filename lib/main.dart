@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:simple_register_app/src/core/di/index.dart' as di;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Dependency injection setup
+  await di.init();
+
   runApp(const MyApp());
 }
 
