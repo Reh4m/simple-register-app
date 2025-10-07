@@ -67,8 +67,17 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> checkIfEmailExists(String email) {
-    // TODO: implement checkIfEmailExists
-    throw UnimplementedError();
+  Future<Either<Failure, bool>> checkIfEmailExists(String email) async {
+    try {
+      final exists = await _authenticationDao.checkIfEmailExists(email);
+
+      return Right(exists);
+    } on LocalDatabaseException catch (e) {
+      return Left(DatabaseFailure(message: e.message));
+    } catch (e) {
+      return Left(
+        DatabaseFailure(message: 'Error inesperado: ${e.toString()}'),
+      );
+    }
   }
 }
