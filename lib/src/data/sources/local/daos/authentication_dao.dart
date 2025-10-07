@@ -49,4 +49,18 @@ class AuthenticationDao {
       rethrow;
     }
   }
+
+  Future<bool> checkIfEmailExists(String email) async {
+    try {
+      await _userDao.fetchByEmail(email);
+
+      return true;
+    } on UserNotFoundException {
+      return false;
+    } catch (e) {
+      throw LocalDatabaseException(
+        message: 'Error al verificar el correo electrónico: ${e.toString()}',
+      );
+    }
+  }
 }
