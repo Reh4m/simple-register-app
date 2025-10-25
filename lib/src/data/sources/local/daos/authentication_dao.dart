@@ -15,7 +15,7 @@ class AuthenticationDao {
 
       if (user.password != data.password) {
         throw const InvalidCredentialsException(
-          message: 'Credenciales inválidas',
+          message: 'Invalid email or password',
         );
       }
 
@@ -26,7 +26,7 @@ class AuthenticationDao {
       }
 
       throw LocalDatabaseException(
-        message: 'Error al iniciar sesión: ${e.toString()}',
+        message: 'Error signing in: ${e.toString()}',
       );
     }
   }
@@ -61,7 +61,7 @@ class AuthenticationDao {
       return false;
     } catch (e) {
       throw LocalDatabaseException(
-        message: 'Error al verificar el correo electrónico: ${e.toString()}',
+        message: 'Error verifying email address: ${e.toString()}',
       );
     }
   }

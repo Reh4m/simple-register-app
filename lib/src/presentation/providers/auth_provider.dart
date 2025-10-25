@@ -64,7 +64,7 @@ class AuthProvider extends ChangeNotifier {
         (user) => _setUser(user),
       );
     } catch (e) {
-      _setError('Error inesperado: ${e.toString()}');
+      _setError('Unexpected database error: ${e.toString()}');
     }
   }
 
@@ -87,7 +87,7 @@ class AuthProvider extends ChangeNotifier {
         (user) => _setUser(user),
       );
     } catch (e) {
-      _setError('Error inesperado: ${e.toString()}');
+      _setError('Unexpected database error: ${e.toString()}');
     }
   }
 

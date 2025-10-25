@@ -47,7 +47,7 @@ class ImagePickerProvider extends ChangeNotifier {
         _setImage(File(pickedFile.path));
       }
     } catch (e) {
-      _setError('Error al seleccionar imagen de la galería: ${e.toString()}');
+      _setError('Error while picking image from gallery: ${e.toString()}');
     } finally {
       _setLoading(false);
     }
@@ -69,7 +69,7 @@ class ImagePickerProvider extends ChangeNotifier {
         _setImage(File(pickedFile.path));
       }
     } catch (e) {
-      _setError('Error al tomar foto con la cámara: ${e.toString()}');
+      _setError('Error while capturing image from camera: ${e.toString()}');
     } finally {
       _setLoading(false);
     }

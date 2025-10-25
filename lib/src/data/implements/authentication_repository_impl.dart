@@ -35,7 +35,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Left(DatabaseFailure(message: e.message));
     } catch (e) {
       return Left(
-        DatabaseFailure(message: 'Error inesperado: ${e.toString()}'),
+        DatabaseFailure(message: 'Unexpected database error: ${e.toString()}'),
       );
     }
   }
@@ -61,7 +61,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Left(DatabaseFailure(message: e.message));
     } catch (e) {
       return Left(
-        DatabaseFailure(message: 'Error inesperado: ${e.toString()}'),
+        DatabaseFailure(message: 'Unexpected database error: ${e.toString()}'),
       );
     }
   }
@@ -76,7 +76,7 @@ class AuthenticationRepositoryImpl implements AuthenticationRepository {
       return Left(DatabaseFailure(message: e.message));
     } catch (e) {
       return Left(
-        DatabaseFailure(message: 'Error inesperado: ${e.toString()}'),
+        DatabaseFailure(message: 'Unexpected database error: ${e.toString()}'),
       );
     }
   }

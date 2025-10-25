@@ -22,7 +22,7 @@ class UserRepositoryImpl implements UserRepository {
       return Left(DatabaseFailure(message: e.message));
     } catch (e) {
       return Left(
-        DatabaseFailure(message: 'Error inesperado: ${e.toString()}'),
+        DatabaseFailure(message: 'Unexpected database error: ${e.toString()}'),
       );
     }
   }
@@ -39,7 +39,7 @@ class UserRepositoryImpl implements UserRepository {
       return Left(DatabaseFailure(message: e.message));
     } catch (e) {
       return Left(
-        DatabaseFailure(message: 'Error inesperado: ${e.toString()}'),
+        DatabaseFailure(message: 'Unexpected database error: ${e.toString()}'),
       );
     }
   }

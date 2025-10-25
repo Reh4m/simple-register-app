@@ -21,16 +21,16 @@ class UserDao {
     } on DatabaseException catch (e) {
       if (e.toString().contains('UNIQUE constraint failed')) {
         throw const UserAlreadyExistsException(
-          message: 'Ya existe un usuario con este correo electrónico',
+          message: 'A user with this email already exists',
         );
       }
 
       throw LocalDatabaseException(
-        message: 'Error al registrar usuario: ${e.toString()}',
+        message: 'Error inserting user: ${e.toString()}',
       );
     } catch (e) {
       throw LocalDatabaseException(
-        message: 'Error inesperado al registrar usuario: ${e.toString()}',
+        message: 'Unexpected error while inserting user: ${e.toString()}',
       );
     }
   }
@@ -47,7 +47,7 @@ class UserDao {
       );
 
       if (results.isEmpty) {
-        throw const UserNotFoundException(message: 'Usuario no encontrado');
+        throw const UserNotFoundException(message: 'User not found');
       }
 
       return UserModel.fromMap(results.first);
@@ -57,7 +57,7 @@ class UserDao {
       }
 
       throw LocalDatabaseException(
-        message: 'Error al obtener usuario: ${e.toString()}',
+        message: 'Error fetching user: ${e.toString()}',
       );
     }
   }
@@ -74,7 +74,7 @@ class UserDao {
       );
 
       if (results.isEmpty) {
-        throw const UserNotFoundException(message: 'Usuario no encontrado');
+        throw const UserNotFoundException(message: 'User not found');
       }
 
       return UserModel.fromMap(results.first);
@@ -84,7 +84,7 @@ class UserDao {
       }
 
       throw LocalDatabaseException(
-        message: 'Error al obtener usuario: ${e.toString()}',
+        message: 'Error fetching user: ${e.toString()}',
       );
     }
   }

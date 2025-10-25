@@ -69,7 +69,7 @@ class SignUpUseCase {
       if (exists) {
         return const Left(
           UserAlreadyExistsFailure(
-            message: 'Ya existe un usuario con este correo electrónico',
+            message: 'A user with this email already exists',
           ),
         );
       }
