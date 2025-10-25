@@ -20,7 +20,7 @@ class UserDao {
       );
     } on DatabaseException catch (e) {
       if (e.toString().contains('UNIQUE constraint failed')) {
-        throw UserAlreadyExistsException(
+        throw const UserAlreadyExistsException(
           message: 'Ya existe un usuario con este correo electrónico',
         );
       }
@@ -47,7 +47,7 @@ class UserDao {
       );
 
       if (results.isEmpty) {
-        throw UserNotFoundException(message: 'Usuario no encontrado');
+        throw const UserNotFoundException(message: 'Usuario no encontrado');
       }
 
       return UserModel.fromMap(results.first);
@@ -74,7 +74,7 @@ class UserDao {
       );
 
       if (results.isEmpty) {
-        throw UserNotFoundException(message: 'Usuario no encontrado');
+        throw const UserNotFoundException(message: 'Usuario no encontrado');
       }
 
       return UserModel.fromMap(results.first);

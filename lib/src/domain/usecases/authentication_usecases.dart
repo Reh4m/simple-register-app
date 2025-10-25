@@ -67,7 +67,7 @@ class SignUpUseCase {
 
     return emailExists.fold((failure) => Left(failure), (exists) async {
       if (exists) {
-        return Left(
+        return const Left(
           UserAlreadyExistsFailure(
             message: 'Ya existe un usuario con este correo electrónico',
           ),

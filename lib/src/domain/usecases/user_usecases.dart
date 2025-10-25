@@ -10,7 +10,7 @@ class GetUserById {
 
   Future<Either<Failure, UserEntity>> call(int userId) async {
     if (userId <= 0) {
-      return Left(ValidationFailure(message: 'ID de usuario inválido'));
+      return const Left(ValidationFailure(message: 'ID de usuario inválido'));
     }
 
     return await _repository.getUserById(userId);
@@ -24,7 +24,7 @@ class GetUserByEmail {
 
   Future<Either<Failure, UserEntity>> call(String email) async {
     if (email.isEmpty) {
-      return Left(
+      return const Left(
         ValidationFailure(message: 'El correo electrónico es requerido'),
       );
     }

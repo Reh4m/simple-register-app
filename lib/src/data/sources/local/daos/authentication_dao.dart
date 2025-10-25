@@ -14,7 +14,9 @@ class AuthenticationDao {
       final user = await _userDao.fetchByEmail(data.email);
 
       if (user.password != data.password) {
-        throw InvalidCredentialsException(message: 'Credenciales inválidas');
+        throw const InvalidCredentialsException(
+          message: 'Credenciales inválidas',
+        );
       }
 
       return user;
