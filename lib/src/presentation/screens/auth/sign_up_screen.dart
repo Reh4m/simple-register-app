@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_register_app/src/core/utils/validators.dart';
 import 'package:simple_register_app/src/domain/entities/sign_up_entity.dart';
 import 'package:simple_register_app/src/presentation/providers/auth_provider.dart';
+import 'package:simple_register_app/src/presentation/utils/toast_notification.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -40,7 +41,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
       setState(() => _selectedProfileImage = File(pickedImage.path));
     } on PlatformException catch (e) {
-      debugPrint('Failed to pick image: $e');
+      _showErrorToastification(
+        title: 'Image Selection Failed',
+        description: 'Error picking image: ${e.message}',
+        type: ToastNotificationType.error,
+      );
     }
   }
 
@@ -63,13 +68,31 @@ class _SignUpScreenState extends State<SignUpScreen> {
         case AuthStatus.authenticated:
           context.goNamed('home');
         case AuthStatus.error:
-          // Error message is shown by the provider
+          _showErrorToastification(
+            title: 'Sign Up Failed',
+            description:
+                authProvider.errorMessage ?? 'An unknown error occurred',
+            type: ToastNotificationType.error,
+          );
           break;
         default:
           // Do nothing
           break;
       }
     }
+  }
+
+  void _showErrorToastification({
+    required String title,
+    required String description,
+    required ToastNotificationType type,
+  }) {
+    ToastNotification.show(
+      context,
+      title: title,
+      description: description,
+      type: type,
+    );
   }
 
   @override
@@ -131,18 +154,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
       key: _signUpFormKey,
       child: Consumer<AuthProvider>(
         builder: (_, authProvider, child) {
-          if (authProvider.errorMessage != null) {
-            WidgetsBinding.instance.addPostFrameCallback((_) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(authProvider.errorMessage!),
-                  backgroundColor: Colors.red,
-                ),
-              );
-              authProvider.clearError();
-            });
-          }
-
           final isLoading = authProvider.isLoading;
 
           return Column(
