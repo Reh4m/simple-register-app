@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:simple_register_app/src/core/di/index.dart' as di;
 import 'package:simple_register_app/src/presentation/config/router/index.dart';
+import 'package:simple_register_app/src/presentation/providers/auth_provider.dart';
+import 'package:simple_register_app/src/presentation/providers/image_picker_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -8,7 +11,15 @@ void main() async {
   // Dependency injection setup
   await di.init();
 
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(create: (_) => ImagePickerProvider()),
+      ],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
