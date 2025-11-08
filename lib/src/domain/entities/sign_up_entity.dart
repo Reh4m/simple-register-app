@@ -23,4 +23,20 @@ class SignUpEntity extends Equatable {
     confirmPassword,
     pictureImagePath,
   ];
+
+  SignUpEntity copyWith({
+    String? name,
+    String? email,
+    String? password,
+    String? confirmPassword,
+    String? pictureImagePath,
+  }) {
+    return SignUpEntity(
+      name: name ?? this.name,
+      email: email ?? this.email,
+      password: password ?? this.password,
+      confirmPassword: confirmPassword ?? this.confirmPassword,
+      pictureImagePath: pictureImagePath ?? this.pictureImagePath,
+    );
+  }
 }
