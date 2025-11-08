@@ -4,17 +4,24 @@ import 'package:simple_register_app/src/presentation/config/router/auth_guard.da
 import 'package:simple_register_app/src/presentation/screens/auth/sign_in_screen.dart';
 import 'package:simple_register_app/src/presentation/screens/auth/sign_up_screen.dart';
 import 'package:simple_register_app/src/presentation/screens/home/index.dart';
+import 'package:simple_register_app/src/presentation/screens/splash_screen.dart';
 
 class AppRouter {
+  static const String splash = '/splash';
   static const String signin = '/signin';
   static const String signup = '/signup';
   static const String home = '/home';
 
   static GoRouter router() {
     return GoRouter(
-      initialLocation: '/signin',
+      initialLocation: '/splash',
       redirect: authGuard,
       routes: [
+        GoRoute(
+          path: splash,
+          name: 'splash',
+          builder: (context, state) => const SplashScreen(),
+        ),
         GoRoute(
           path: signin,
           name: 'signin',
