@@ -1,4 +1,6 @@
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:simple_register_app/src/core/session/session_manager.dart';
 import 'package:simple_register_app/src/data/implements/authentication_repository_impl.dart';
 import 'package:simple_register_app/src/data/implements/user_repository_impl.dart';
 import 'package:simple_register_app/src/data/sources/local/daos/authentication_dao.dart';
@@ -12,6 +14,11 @@ import 'package:simple_register_app/src/domain/usecases/user_usecases.dart';
 final sl = GetIt.instance;
 
 Future<void> init() async {
+  // injection_container.dart
+  final sharedPreferences = await SharedPreferences.getInstance();
+
+  sl.registerLazySingleton<SharedPreferences>(() => sharedPreferences);
+
   // Core
   // - Database Provider
   sl.registerSingleton<DatabaseProvider>(DatabaseProvider());
@@ -48,5 +55,10 @@ Future<void> init() async {
   );
   sl.registerLazySingleton<GetUserByEmail>(
     () => GetUserByEmail(sl<UserRepository>()),
+  );
+
+  // Session Manager
+  sl.registerLazySingleton<SessionManager>(
+    () => SessionManager(sl<SharedPreferences>()),
   );
 }
