@@ -1,25 +1,33 @@
 import 'package:flutter/foundation.dart';
 import 'package:simple_register_app/src/core/di/index.dart';
+import 'package:simple_register_app/src/core/session/session_manager.dart';
 import 'package:simple_register_app/src/domain/entities/sign_in_entity.dart';
 import 'package:simple_register_app/src/domain/entities/sign_up_entity.dart';
 import 'package:simple_register_app/src/domain/entities/user_entity.dart';
 import 'package:simple_register_app/src/domain/usecases/authentication_usecases.dart';
+import 'package:simple_register_app/src/domain/usecases/user_usecases.dart';
 
 enum AuthStatus { initial, loading, authenticated, unauthenticated, error }
 
 class AuthProvider extends ChangeNotifier {
-  final SignInUseCase _loginUser = sl<SignInUseCase>();
-  final SignUpUseCase _registerUser = sl<SignUpUseCase>();
+  final SignInUseCase _signInUser = sl<SignInUseCase>();
+  final SignUpUseCase _signUpUser = sl<SignUpUseCase>();
+  final GetUserById _getUserById = sl<GetUserById>();
+
+  final SessionManager _sessionManager = sl<SessionManager>();
 
   UserEntity? _currentUser;
   AuthStatus _status = AuthStatus.initial;
   String? _errorMessage;
+  // Indicates whether the user session has been initialized
+  bool _isInitialized = false;
 
   UserEntity? get currentUser => _currentUser;
   bool get isAuthenticated => _status == AuthStatus.authenticated;
-  bool get isLoading => _status == AuthStatus.loading;
   AuthStatus get status => _status;
+  bool get isLoading => _status == AuthStatus.loading;
   String? get errorMessage => _errorMessage;
+  bool get isInitialized => _isInitialized;
 
   void _setUser(UserEntity user) {
     _currentUser = user;
@@ -48,57 +56,145 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  Future<void> signIn(SignInEntity data) async {
+  Future<void> signIn({
+    required SignInEntity data,
+    required bool rememberMe,
+  }) async {
     try {
       _setStatus(AuthStatus.loading);
 
-      final result = await _loginUser(
-        SignInEntity(
-          email: data.email.trim().toLowerCase(),
-          password: data.password,
-        ),
+      final result = await _signInUser(
+        data.copyWith(email: data.email.trim().toLowerCase()),
       );
 
-      result.fold(
-        (failure) => _setError(failure.message),
-        (user) => _setUser(user),
-      );
+      result.fold((failure) => _setError(failure.message), (user) async {
+        if (user.id == null) {
+          _setError('Invalid user data received.');
+          return;
+        }
+
+        final saveSessionSuccess = await _sessionManager.saveUserSession(
+          userId: user.id!,
+          email: user.email,
+          rememberMe: rememberMe,
+        );
+
+        if (!saveSessionSuccess) {
+          _setError('Failed to save user session.');
+          return;
+        }
+
+        _setUser(user);
+      });
     } catch (e) {
       _setError('Unexpected database error: ${e.toString()}');
     }
   }
 
-  Future<void> signUp(SignUpEntity data) async {
+  Future<void> signUp({
+    required SignUpEntity data,
+    required bool rememberMe,
+  }) async {
     try {
       _setStatus(AuthStatus.loading);
 
-      final result = await _registerUser(
-        SignUpEntity(
+      final result = await _signUpUser(
+        data.copyWith(
           name: data.name.trim(),
           email: data.email.trim().toLowerCase(),
-          password: data.password,
-          confirmPassword: data.confirmPassword,
-          pictureImagePath: data.pictureImagePath,
         ),
       );
 
-      result.fold(
-        (failure) => _setError(failure.message),
-        (user) => _setUser(user),
-      );
+      result.fold((failure) => _setError(failure.message), (user) async {
+        if (user.id == null) {
+          _setError('Invalid user data received.');
+          return;
+        }
+
+        final saveSessionSuccess = await _sessionManager.saveUserSession(
+          userId: user.id!,
+          email: user.email,
+          rememberMe: rememberMe,
+        );
+
+        if (!saveSessionSuccess) {
+          _setError('Failed to save user session.');
+          return;
+        }
+
+        _setUser(user);
+      });
     } catch (e) {
       _setError('Unexpected database error: ${e.toString()}');
     }
   }
 
-  void signOut() {
-    _currentUser = null;
-    _errorMessage = null;
-    _setStatus(AuthStatus.unauthenticated);
+  void signOut() async {
+    try {
+      _setStatus(AuthStatus.loading);
+
+      final result = await _sessionManager.clearSession();
+
+      if (!result) {
+        _setError('Failed to clear user session.');
+        return;
+      }
+
+      _currentUser = null;
+      _errorMessage = null;
+      _setStatus(AuthStatus.unauthenticated);
+    } catch (e) {
+      _setError('Error signing out: ${e.toString()}');
+    }
   }
 
-  void initialize() {
-    // TODO: Implement persistent login
-    _setStatus(AuthStatus.unauthenticated);
+  void initialize() async {
+    if (_isInitialized) return;
+
+    try {
+      _setStatus(AuthStatus.loading);
+
+      if (!_sessionManager.isSessionValid(expirationDays: 30)) {
+        if (_sessionManager.isLoggedIn) {
+          _sessionManager.clearSession();
+        }
+
+        _setStatus(AuthStatus.unauthenticated);
+
+        return;
+      }
+
+      final userId = _sessionManager.userId;
+
+      if (userId == null) {
+        _sessionManager.clearSession();
+        _setStatus(AuthStatus.unauthenticated);
+        return;
+      }
+
+      final currentUser = await _getUserById(userId);
+
+      currentUser.fold(
+        (failure) {
+          _sessionManager.clearSession();
+          _setStatus(AuthStatus.unauthenticated);
+        },
+        (user) {
+          _setUser(user);
+
+          _sessionManager.updateLastActivity();
+        },
+      );
+    } catch (e) {
+      _setError('Error initializing session: ${e.toString()}');
+
+      _setStatus(AuthStatus.unauthenticated);
+    } finally {
+      _isInitialized = true;
+    }
+  }
+
+  bool checkSessionValidity() {
+    return _sessionManager.isSessionValid();
   }
 }
