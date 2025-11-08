@@ -14,7 +14,15 @@ void main() async {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => AuthProvider()),
+        ChangeNotifierProvider(
+          create: (_) {
+            final authProvider = AuthProvider();
+
+            authProvider.initialize();
+
+            return authProvider;
+          },
+        ),
         ChangeNotifierProvider(create: (_) => ImagePickerProvider()),
       ],
       child: const MyApp(),
