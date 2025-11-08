@@ -7,21 +7,41 @@ import 'package:simple_register_app/src/presentation/providers/auth_provider.dar
 
 FutureOr<String?> authGuard(BuildContext context, GoRouterState state) {
   final authProvider = context.read<AuthProvider>();
+  final authStatus = authProvider.status;
   final isAuthenticated = authProvider.isAuthenticated;
+  final currentLocation = state.uri.path;
 
-  final publicRoutes = ['/signin', '/signup'];
-  final isPublicRoute = publicRoutes.contains(state.uri.path);
+  final isSplash = currentLocation == '/splash';
+  final isSignIn = currentLocation == '/signin';
+  final isSignUp = currentLocation == '/signup';
+  final isAuthPage = isSignIn || isSignUp;
+  final isHome = currentLocation == '/home';
 
-  // If the user is not authenticated and trying to access a protected route, redirect to sign-in
-  if (!isAuthenticated && !isPublicRoute) {
+  if (authStatus == AuthStatus.initial ||
+      (authStatus == AuthStatus.loading && !authProvider.isInitialized)) {
+    return isSplash ? null : '/splash';
+  }
+
+  if (isAuthenticated) {
+    if (isSplash || isAuthPage) return '/home';
+
+    if (!authProvider.checkSessionValidity()) {
+      authProvider.signOut();
+      return '/signin';
+    }
+
+    return null;
+  }
+
+  if (!isAuthenticated) {
+    if (isHome || isSplash) return '/signin';
+
+    if (isAuthPage) return null;
+  }
+
+  if (authStatus == AuthStatus.error && !isAuthPage && !isSplash) {
     return '/signin';
   }
 
-  // If the user is authenticated and trying to access a public route, redirect to home
-  if (isAuthenticated && isPublicRoute) {
-    return '/home';
-  }
-
-  // No redirection needed
   return null;
 }

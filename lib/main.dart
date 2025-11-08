@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Simple Register App',
-      routerConfig: AppRouter.router(),
+      routerConfig: AppRouter.router(context),
     );
   }
 }
