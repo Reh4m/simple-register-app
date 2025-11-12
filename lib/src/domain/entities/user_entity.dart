@@ -32,6 +32,9 @@ class UserEntity extends Equatable {
     return name.isNotEmpty ? name[0].toUpperCase() : '?';
   }
 
+  bool get hasPicture =>
+      pictureImagePath != null && pictureImagePath!.isNotEmpty;
+
   UserEntity copyWith({
     int? id,
     String? name,
