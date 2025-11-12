@@ -7,8 +7,12 @@ import 'package:simple_register_app/src/presentation/providers/auth_provider.dar
 
 FutureOr<String?> authGuard(BuildContext context, GoRouterState state) {
   final authProvider = context.read<AuthProvider>();
+  final user = authProvider.currentUser;
+
+  final isAuthenticated = user != null;
+  final hasPicture = user?.hasPicture ?? false;
   final authStatus = authProvider.status;
-  final isAuthenticated = authProvider.isAuthenticated;
+
   final currentLocation = state.uri.path;
 
   final isSplash = currentLocation == '/splash';
@@ -16,10 +20,15 @@ FutureOr<String?> authGuard(BuildContext context, GoRouterState state) {
   final isSignUp = currentLocation == '/signup';
   final isAuthPage = isSignIn || isSignUp;
   final isHome = currentLocation == '/home';
+  final isAvatarSelector = currentLocation == '/avatar-selector';
 
   if (authStatus == AuthStatus.initial ||
       (authStatus == AuthStatus.loading && !authProvider.isInitialized)) {
     return isSplash ? null : '/splash';
+  }
+
+  if (isAuthenticated && !hasPicture && !isAvatarSelector) {
+    return '/avatar-selector';
   }
 
   if (isAuthenticated) {
