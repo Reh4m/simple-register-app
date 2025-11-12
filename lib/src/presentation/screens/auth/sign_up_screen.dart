@@ -1,11 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_register_app/src/core/utils/validators.dart';
 import 'package:simple_register_app/src/domain/entities/sign_up_entity.dart';
@@ -26,29 +22,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _passwordTextController = TextEditingController();
   final _confirmPasswordTextController = TextEditingController();
 
-  File? _selectedProfileImage;
-
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
   bool _rememberMe = false;
-
-  Future<void> _pickProfileImage() async {
-    try {
-      final pickedImage = await ImagePicker().pickImage(
-        source: ImageSource.gallery,
-      );
-
-      if (pickedImage == null) return;
-
-      setState(() => _selectedProfileImage = File(pickedImage.path));
-    } on PlatformException catch (e) {
-      _showErrorToastification(
-        title: 'Image Selection Failed',
-        description: 'Error picking image: ${e.message}',
-        type: ToastNotificationType.error,
-      );
-    }
-  }
 
   Future<void> _handleSignUp() async {
     if (_signUpFormKey.currentState?.validate() ?? false) {
@@ -159,8 +135,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
           return Column(
             children: [
-              _buildProfileImagePicker(theme, isLoading),
-              const SizedBox(height: 20.0),
               _buildFullNameField(isLoading),
               const SizedBox(height: 20.0),
               _buildEmailField(isLoading),
@@ -175,54 +149,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ],
           );
         },
-      ),
-    );
-  }
-
-  Widget _buildProfileImagePicker(ThemeData theme, bool isLoading) {
-    return InkWell(
-      onTap: !isLoading ? _pickProfileImage : null,
-      borderRadius: BorderRadius.circular(50.0),
-      child: Stack(
-        alignment: Alignment.bottomRight,
-        children: [
-          Container(
-            width: 100.0,
-            height: 100.0,
-            decoration: BoxDecoration(
-              color: theme.colorScheme.surface,
-              image:
-                  _selectedProfileImage != null
-                      ? DecorationImage(
-                        image: FileImage(_selectedProfileImage!),
-                        fit: BoxFit.cover,
-                      )
-                      : null,
-              borderRadius: BorderRadius.circular(50.0),
-            ),
-            child:
-                _selectedProfileImage == null
-                    ? Icon(
-                      Icons.camera_alt_outlined,
-                      size: 40.0,
-                      color: theme.colorScheme.onSurface,
-                    )
-                    : null,
-          ),
-          Container(
-            width: 30.0,
-            height: 30.0,
-            decoration: BoxDecoration(
-              color: theme.primaryColor,
-              borderRadius: BorderRadius.circular(15.0),
-            ),
-            child: Icon(
-              Icons.add,
-              size: 20.0,
-              color: theme.colorScheme.onPrimary,
-            ),
-          ),
-        ],
       ),
     );
   }
