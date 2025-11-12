@@ -30,6 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
+  bool _rememberMe = false;
 
   Future<void> _pickProfileImage() async {
     try {
@@ -60,7 +61,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
         confirmPassword: _confirmPasswordTextController.text.trim(),
       );
 
-      await authProvider.signUp(signInData);
+      await authProvider.signUp(data: signInData, rememberMe: true);
 
       if (!context.mounted) return;
 
@@ -167,6 +168,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
               _buildPasswordField(isLoading),
               const SizedBox(height: 20.0),
               _buildConfirmPasswordField(isLoading),
+              const SizedBox(height: 20.0),
+              _buildRememberMeCheckbox(isLoading),
               const SizedBox(height: 20.0),
               _buildSignUpButton(isLoading),
             ],
@@ -313,6 +316,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
         return null;
       },
       enabled: !isLoading,
+    );
+  }
+
+  Widget _buildRememberMeCheckbox(bool isLoading) {
+    return CheckboxListTile(
+      value: _rememberMe,
+      onChanged:
+          !isLoading
+              ? (value) => setState(() => _rememberMe = value ?? false)
+              : null,
+      title: const Text('Remember Me'),
+      controlAffinity: ListTileControlAffinity.leading,
+      contentPadding: EdgeInsets.zero,
     );
   }
 
