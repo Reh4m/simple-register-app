@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_register_app/src/presentation/config/router/auth_guard.dart'
     show authGuard;
 import 'package:simple_register_app/src/presentation/providers/auth_provider.dart';
+import 'package:simple_register_app/src/presentation/screens/auth/avatar_selector_screen.dart';
 import 'package:simple_register_app/src/presentation/screens/auth/sign_in_screen.dart';
 import 'package:simple_register_app/src/presentation/screens/auth/sign_up_screen.dart';
 import 'package:simple_register_app/src/presentation/screens/home/index.dart';
@@ -13,11 +14,12 @@ class AppRouter {
   static const String splash = '/splash';
   static const String signin = '/signin';
   static const String signup = '/signup';
+  static const String avatar_selector = '/avatar-selector';
   static const String home = '/home';
 
   static GoRouter router(BuildContext context) {
     return GoRouter(
-      initialLocation: '/splash',
+      initialLocation: splash,
       redirect: authGuard,
       refreshListenable: context.read<AuthProvider>(),
       routes: [
@@ -35,6 +37,11 @@ class AppRouter {
           path: signup,
           name: 'signup',
           builder: (context, state) => const SignUpScreen(),
+        ),
+        GoRoute(
+          path: avatar_selector,
+          name: 'avatar_selector',
+          builder: (context, state) => const AvatarSelectorScreen(),
         ),
         GoRoute(
           path: home,
