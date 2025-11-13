@@ -13,6 +13,8 @@ class AuthProvider extends ChangeNotifier {
   final SignInUseCase _signInUser = sl<SignInUseCase>();
   final SignUpUseCase _signUpUser = sl<SignUpUseCase>();
   final GetUserById _getUserById = sl<GetUserById>();
+  final UpdatePictureImagePath _setUserPicturePath =
+      sl<UpdatePictureImagePath>();
 
   final SessionManager _sessionManager = sl<SessionManager>();
 
@@ -126,6 +128,30 @@ class AuthProvider extends ChangeNotifier {
       });
     } catch (e) {
       _setError('Unexpected database error: ${e.toString()}');
+    }
+  }
+
+  Future<void> setUserPicturePath(String path) async {
+    if (_currentUser == null || _currentUser!.id == null) {
+      _setError('No authenticated user to update picture path.');
+      return;
+    }
+
+    try {
+      _setStatus(AuthStatus.loading);
+
+      final result = await _setUserPicturePath(_currentUser!.id!, path);
+
+      result.fold((failure) => _setError(failure.message), (success) {
+        if (success) {
+          _currentUser = _currentUser!.copyWith(pictureImagePath: path);
+          _setStatus(AuthStatus.authenticated);
+        } else {
+          _setError('Failed to update picture path.');
+        }
+      });
+    } catch (e) {
+      _setError('Unexpected error: ${e.toString()}');
     }
   }
 
