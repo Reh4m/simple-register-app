@@ -51,6 +51,24 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<Either<Failure, bool>> updatePictureImagePath(
+    int id,
+    String pictureImagePath,
+  ) async {
+    try {
+      await _userDao.updatePictureImagePath(id, pictureImagePath);
+
+      return const Right(true);
+    } on LocalDatabaseException catch (e) {
+      return Left(DatabaseFailure(message: e.message));
+    } catch (e) {
+      return Left(
+        DatabaseFailure(message: 'Unexpected database error: ${e.toString()}'),
+      );
+    }
+  }
+
+  @override
   Future<Either<Failure, bool>> deleteUser(int id) {
     // TODO: implement deleteUser
     throw UnimplementedError();

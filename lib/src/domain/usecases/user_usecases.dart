@@ -32,3 +32,23 @@ class GetUserByEmail {
     return await _repository.getUserByEmail(email);
   }
 }
+
+class UpdatePictureImagePath {
+  final UserRepository _repository;
+
+  UpdatePictureImagePath(this._repository);
+
+  Future<Either<Failure, bool>> call(int id, String pictureImagePath) async {
+    if (id <= 0) {
+      return const Left(ValidationFailure(message: 'ID de usuario inválido'));
+    }
+
+    if (pictureImagePath.isEmpty) {
+      return const Left(
+        ValidationFailure(message: 'La ruta de la imagen no puede estar vacía'),
+      );
+    }
+
+    return await _repository.updatePictureImagePath(id, pictureImagePath);
+  }
+}

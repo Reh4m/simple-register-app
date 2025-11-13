@@ -9,5 +9,10 @@ abstract class UserRepository {
 
   Future<Either<Failure, bool>> updateUser(UserEntity user);
 
+  Future<Either<Failure, bool>> updatePictureImagePath(
+    int id,
+    String pictureImagePath,
+  );
+
   Future<Either<Failure, bool>> deleteUser(int id);
 }

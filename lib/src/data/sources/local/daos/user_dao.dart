@@ -88,4 +88,26 @@ class UserDao {
       );
     }
   }
+
+  Future<int> updatePictureImagePath(int id, String pictureImagePath) async {
+    try {
+      final db = await _databaseProvider.database;
+
+      return await db.update(
+        UserTable.tableName,
+        {UserTable.pictureImagePathColumn: pictureImagePath},
+        where: '${UserTable.idColumn} = ?',
+        whereArgs: [id],
+      );
+    } on DatabaseException catch (e) {
+      throw LocalDatabaseException(
+        message: 'Error updating picture image path: ${e.toString()}',
+      );
+    } catch (e) {
+      throw LocalDatabaseException(
+        message:
+            'Unexpected error while updating picture image path: ${e.toString()}',
+      );
+    }
+  }
 }
