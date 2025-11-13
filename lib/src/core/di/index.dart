@@ -56,6 +56,9 @@ Future<void> init() async {
   sl.registerLazySingleton<GetUserByEmail>(
     () => GetUserByEmail(sl<UserRepository>()),
   );
+  sl.registerLazySingleton<UpdatePictureImagePath>(
+    () => UpdatePictureImagePath(sl<UserRepository>()),
+  );
 
   // Session Manager
   sl.registerLazySingleton<SessionManager>(
