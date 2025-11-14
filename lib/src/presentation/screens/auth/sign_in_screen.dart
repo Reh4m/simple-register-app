@@ -20,7 +20,6 @@ class _SignInScreenState extends State<SignInScreen> {
   final _passwordTextController = TextEditingController();
 
   bool _isPasswordVisible = false;
-  bool _rememberMe = false;
 
   Future<void> _handleSignIn() async {
     if (_signInFormKey.currentState?.validate() ?? false) {
@@ -31,7 +30,7 @@ class _SignInScreenState extends State<SignInScreen> {
         password: _passwordTextController.text.trim(),
       );
 
-      await authProvider.signIn(data: signInData, rememberMe: _rememberMe);
+      await authProvider.signIn(data: signInData, rememberMe: false);
 
       if (!context.mounted) return;
 
@@ -115,8 +114,6 @@ class _SignInScreenState extends State<SignInScreen> {
               const SizedBox(height: 20.0),
               _buildPasswordField(isLoading),
               const SizedBox(height: 20.0),
-              _buildRememberMeCheckbox(isLoading),
-              const SizedBox(height: 20.0),
               _buildSignInButton(isLoading),
             ],
           );
@@ -172,19 +169,6 @@ class _SignInScreenState extends State<SignInScreen> {
         return null;
       },
       enabled: !isLoading,
-    );
-  }
-
-  Widget _buildRememberMeCheckbox(bool isLoading) {
-    return CheckboxListTile(
-      value: _rememberMe,
-      onChanged:
-          !isLoading
-              ? (value) => setState(() => _rememberMe = value ?? false)
-              : null,
-      title: const Text('Remember Me'),
-      controlAffinity: ListTileControlAffinity.leading,
-      contentPadding: EdgeInsets.zero,
     );
   }
 
