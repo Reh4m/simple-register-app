@@ -6,7 +6,9 @@ import 'package:go_router/go_router.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_register_app/src/presentation/config/themes/color_palette.dart';
 import 'package:simple_register_app/src/presentation/providers/auth_provider.dart';
+import 'package:simple_register_app/src/presentation/utils/custom_button.dart';
 import 'package:simple_register_app/src/presentation/utils/toast_notification.dart';
 
 class AvatarSelectorScreen extends StatefulWidget {
@@ -107,9 +109,12 @@ class _AvatarSelectorScreenState extends State<AvatarSelectorScreen> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   const SizedBox(height: 20),
-                  _buildHeader(theme),
+                  Text(
+                    'Select Your Avatar',
+                    style: theme.textTheme.headlineLarge,
+                  ),
                   const SizedBox(height: 20),
                   _buildAvatarPreview(),
                   const SizedBox(height: 20),
@@ -126,12 +131,6 @@ class _AvatarSelectorScreenState extends State<AvatarSelectorScreen> {
     );
   }
 
-  Widget _buildHeader(ThemeData theme) {
-    return Center(
-      child: Text('Select Your Avatar', style: theme.textTheme.headlineLarge),
-    );
-  }
-
   Widget _buildAvatarPreview() {
     final imageProvider =
         _isCustomImageSelected
@@ -139,14 +138,12 @@ class _AvatarSelectorScreenState extends State<AvatarSelectorScreen> {
             : AssetImage('assets/images/avatars/$_selectedAvatarFileName')
                 as ImageProvider;
 
-    return Center(
-      child: Container(
-        width: 150,
-        height: 150,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-        ),
+    return Container(
+      width: 150,
+      height: 150,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
       ),
     );
   }
@@ -207,13 +204,13 @@ class _AvatarSelectorScreenState extends State<AvatarSelectorScreen> {
         children: [
           Container(
             decoration: BoxDecoration(
-              color: const Color(0xFFdee2e6),
+              color: ColorPalette.greyLighten3,
               borderRadius: BorderRadius.circular(50.0),
             ),
             child: const Center(
               child: HugeIcon(
                 icon: HugeIcons.strokeRoundedImageAdd02,
-                color: Color(0xFF495057),
+                color: ColorPalette.greyDarken2,
                 size: 46,
                 strokeWidth: 2.5,
               ),
@@ -226,38 +223,19 @@ class _AvatarSelectorScreenState extends State<AvatarSelectorScreen> {
   }
 
   Widget _buildContinueButton({required bool isLoading}) {
-    return FilledButton(
+    return CustomButton(
       onPressed: !isLoading ? _saveSelectedAvatar : null,
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        minimumSize: const Size(double.infinity, 0),
+      text: 'Continue',
+      variant: ButtonVariant.primary,
+      isLoading: isLoading,
+      width: double.infinity,
+      icon: const HugeIcon(
+        icon: HugeIcons.strokeRoundedArrowRight02,
+        color: Colors.white,
+        size: 18,
+        strokeWidth: 2.5,
       ),
-      child:
-          isLoading
-              ? const SizedBox(
-                height: 21.0,
-                width: 21.0,
-                child: CircularProgressIndicator(strokeWidth: 3.0),
-              )
-              : const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Continue',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(width: 10),
-                  HugeIcon(
-                    icon: HugeIcons.strokeRoundedArrowRight02,
-                    color: Colors.white,
-                    size: 18,
-                    strokeWidth: 2.5,
-                  ),
-                ],
-              ),
+      iconPosition: ButtonIconPosition.right,
     );
   }
 
@@ -274,7 +252,7 @@ class _AvatarSelectorScreenState extends State<AvatarSelectorScreen> {
           duration: const Duration(milliseconds: 250),
           child: Container(
             decoration: const BoxDecoration(
-              color: Color(0xFFff6b6b),
+              color: ColorPalette.greyDarken4,
               shape: BoxShape.circle,
             ),
             padding: const EdgeInsets.all(4),
