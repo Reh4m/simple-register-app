@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:simple_register_app/src/core/utils/validators.dart';
 import 'package:simple_register_app/src/domain/entities/sign_up_entity.dart';
 import 'package:simple_register_app/src/presentation/providers/auth_provider.dart';
+import 'package:simple_register_app/src/presentation/utils/custom_button.dart';
 import 'package:simple_register_app/src/presentation/utils/toast_notification.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -243,38 +244,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   Widget _buildSignUpButton(bool isLoading) {
-    return FilledButton(
+    return CustomButton(
       onPressed: !isLoading ? _handleSignUp : null,
-      style: TextButton.styleFrom(
-        padding: const EdgeInsets.symmetric(vertical: 15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        minimumSize: const Size(double.infinity, 0),
+      text: 'Sign Up',
+      variant: ButtonVariant.primary,
+      isLoading: isLoading,
+      width: double.infinity,
+      icon: const HugeIcon(
+        icon: HugeIcons.strokeRoundedArrowRight02,
+        color: Colors.white,
+        size: 18,
+        strokeWidth: 2.5,
       ),
-      child:
-          isLoading
-              ? const SizedBox(
-                height: 21.0,
-                width: 21.0,
-                child: CircularProgressIndicator(strokeWidth: 3.0),
-              )
-              : const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Sign Up',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(width: 10),
-                  HugeIcon(
-                    icon: HugeIcons.strokeRoundedArrowRight02,
-                    color: Colors.white,
-                    size: 18,
-                    strokeWidth: 2.5,
-                  ),
-                ],
-              ),
+      iconPosition: ButtonIconPosition.right,
     );
   }
 
