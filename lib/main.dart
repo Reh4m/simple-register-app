@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_register_app/src/core/di/index.dart' as di;
 import 'package:simple_register_app/src/presentation/config/router/index.dart';
+import 'package:simple_register_app/src/presentation/config/themes/app_theme.dart';
 import 'package:simple_register_app/src/presentation/providers/auth_provider.dart';
 import 'package:simple_register_app/src/presentation/providers/image_picker_provider.dart';
 
@@ -38,6 +39,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       title: 'Simple Register App',
+      theme: AppTheme.light,
+      themeMode: ThemeMode.light,
       routerConfig: AppRouter.router(context),
     );
   }
